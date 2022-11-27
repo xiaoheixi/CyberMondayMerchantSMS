@@ -41,6 +41,15 @@ namespace TestConsoleApp
                 {
                     body_messages_0.DestinationNumber = regex.Replace(x.Split(',')[4].TrimStart().Replace("'", ""), "+61", 1);
                 }
+                if (Regex.IsMatch(body_messages_0.DestinationNumber, "^\\+614[0-9]{8}$") == false)
+                {
+                    var tempFile = Path.GetTempFileName();
+                    var linesToKeep = File.ReadLines(textFile).Where(l => l != x);
+                    File.WriteAllLines(tempFile, linesToKeep);
+                    File.Delete(textFile);
+                    File.Move(tempFile, textFile);
+                    continue;
+                }
                 body.Messages.Add(body_messages_0);
                 try
                 {
